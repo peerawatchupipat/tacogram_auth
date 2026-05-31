@@ -23,6 +23,7 @@ class SessionsController < ApplicationController
       # 4a. if the user doesn't exist -> login fails
     flash["alert"] = "User not found."
     redirect_to "/login"
+    end
   end
 
   def destroy
