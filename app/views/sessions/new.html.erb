@@ -1,13 +1,20 @@
 <h1>Login</h1>
+<% if flash["notice"] %>
+  <p style="color: green;"><%= flash["notice"] %></p>
+<% end %>
+
+<% if flash["alert"] %>
+  <p style="color: red;"><%= flash["alert"] %></p>
+<% end %>
 
 <form action="/sessions" method="post">
   <p>
     <label for="email_input">Email</label>
     <input type="text" name="email" id="email_input">
 
-    <!-- TODO: obfiscate password input -->
+    <!-- TODO: obfuscate password input -->
     <label for="password_input">Password</label>
-    <input type="text" name="password" id="password_input">
+    <input type="password" name="password" id="password_input">
   </p>
 
   <button>Login</button>

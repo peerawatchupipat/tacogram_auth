@@ -9,11 +9,13 @@ class UsersController < ApplicationController
       @user["last_name"] = params["last_name"]
       @user["email"] = params["email"]
       # TODO: encrypt user's password "at rest"
-      @user["password"] = params["password"]
+      encrypted_password = BCrypt::Password.create(params["password"])
+      @user["password"] = encrypted_password
+      # @user["password"] = params["password"] --- IGNORE ---
       @user.save
       redirect_to "/login"
     else
-      flash["notice"] = "Email taken."
+      flash["alert"] = "Email taken."
       redirect_to "/users/new"
     end
   end
