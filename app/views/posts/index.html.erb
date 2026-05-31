@@ -5,10 +5,46 @@
         <%# TODO: display the name of the user who created the post %>
         <%# 1. find user who created post %>
         <%# 2. handle any potential bad data where the post is missing a user %>
+        <% user = User.find_by({ "id" => post["user_id"] }) %>
+        <% if user %>
+        <%= user["first_name"] %>
+        <% else %>
         anonymous
+        <% end %>
       </h4>
       <img src="<%= post["image"] %>" class="img-fluid w-full">
       <p><%= post["body"] %></p>
+
+      <%# Show existing comments %>
+      <% comments = Comment.where({ "post_id" => post["id"] }) %>
+      <% for comment in comments %>
+        <% commenter = User.find_by({ "id" => comment["user_id"] }) %>
+        <p>
+          <% if commenter != nil %>
+            <%= commenter["first_name"] %>
+          <% else %>
+            anonymous
+          <% end %>
+          
+          <strong><%= comment["body"] %></strong>
+
+          <% if @current_user != nil && @current_user["id"] == comment["user_id"] %>
+            <form action="/comments/<%= comment["id"] %>" method="post">
+              <input type="hidden" name="_method" value="delete">
+              <button>Delete</button>
+            </form>
+          <% end %>
+        </p>
+      <% end %>
+
+      <%# Comment form (only if logged in) %>
+      <% if @current_user != nil %>
+        <form action="/comments" method="post">
+          <input type="hidden" name="post_id" value="<%= post["id"] %>">
+          <input type="text" name="body" placeholder="Add a comment...">
+          <button>Post</button>
+        </form>
+      <% end %>
     </div>
   <% end %>
 </div>
